@@ -1,385 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Augmented Human Lab @ CHI 2026</title>
-  <meta name="description" content="The Augmented Human Lab at CHI 2026 in Barcelona — April 12–18, 2026.">
-  <link rel="stylesheet" href="https://use.typekit.net/zws2qzx.css">
-  <style>
-    /* ============================================================
-       DESIGN TOKENS (from theme.css, inlined for standalone page)
-       ============================================================ */
-    :root {
-      --color-accent:       #6100FF;
-      --color-accent-dark:  #4400B3;
-      --color-accent-light: #904DFF;
-      --gradient-start:     #00D7EE;
-      --gradient-end:       #6100FF;
-      --gradient:           linear-gradient(221deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      --color-neutral-10:   #FFFFFF;
-      --color-neutral-20:   #F4F7F9;
-      --color-neutral-30:   #EDF0F3;
-      --color-neutral-40:   #C9D8E3;
-      --color-neutral-60:   #AAAFB6;
-      --color-neutral-70:   #838D95;
-      --color-neutral-80:   #5E6875;
-      --color-neutral-100:  #0E0F11;
-      --font-display:       "neue-haas-grotesk-display", sans-serif;
-      --font-text:          "neue-haas-grotesk-text", sans-serif;
-      --radius-sm:          8px;
-      --radius:             12px;
-      --radius-lg:          16px;
-    }
-
-    /* ── Reset & base ──────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-text);
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--color-neutral-100);
-      background: var(--color-neutral-10);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-    a   { color: inherit; text-decoration: none; }
-    img { max-width: 100%; height: auto; display: block; }
-    ul  { list-style: none; }
-
-    .container {
-      width: 100%;
-      max-width: 1370px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-    @media (max-width: 767px) { .container { padding: 0 20px; } }
-
-    /* ── Navigation ─────────────────────────────────────────
-       Simple two-mode nav matching the main site: transparent
-       over the gradient hero, white background on scroll.
-       ─────────────────────────────────────────────────────── */
-    .site-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 0 40px; height: 92px;
-      display: flex; align-items: center; justify-content: space-between;
-      transition: background .4s, box-shadow .4s;
-    }
-    .site-nav.scrolled {
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 1px 0 rgba(0,0,0,.06);
-    }
-
-    .nav-brand {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 16px;
-      letter-spacing: -.01em;
-      color: #fff;
-      transition: color .3s;
-    }
-    .site-nav.scrolled .nav-brand { color: var(--color-neutral-100); }
-
-    .nav-back {
-      font-family: var(--font-text);
-      font-weight: 500;
-      font-size: 14px;
-      letter-spacing: .02em;
-      color: rgba(255,255,255,.7);
-      transition: color .3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .nav-back:hover { color: #fff; }
-    .site-nav.scrolled .nav-back { color: var(--color-neutral-80); }
-    .site-nav.scrolled .nav-back:hover { color: var(--color-accent); }
-
-    /* ── Hero ───────────────────────────────────────────────
-       Gradient background, eyebrow label, big headline, meta
-       row for dates + location. Matches the main site's
-       people-index / press / publications hero style.
-       ─────────────────────────────────────────────────────── */
-    .hero {
-      position: relative;
-      padding: 160px 0 80px;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--gradient);
-    }
-    .hero .container { position: relative; z-index: 2; }
-
-    .hero-eyebrow {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 12px;
-      letter-spacing: 1.71px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.55);
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 72px;
-      line-height: .98;
-      letter-spacing: -.02em;
-      color: #fff;
-      max-width: 1100px;
-      margin-bottom: 36px;
-    }
-    .hero h1 .hero-h1-sub {
-      display: block;
-      font-weight: 300;
-      font-style: italic;
-      color: rgba(255,255,255,.8);
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 48px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(255,255,255,.2);
-      max-width: 900px;
-    }
-    .meta-group { display: flex; flex-direction: column; gap: 6px; }
-    .meta-label {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.55);
-    }
-    .meta-value {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 20px;
-      color: #fff;
-    }
-
-    @media (max-width: 991px) {
-      .hero { padding: 140px 0 60px; }
-      .hero h1 { font-size: 52px; }
-      .hero-meta { gap: 32px; }
-      .meta-value { font-size: 17px; }
-    }
-    @media (max-width: 567px) {
-      .hero h1 { font-size: 40px; }
-      .hero-meta { gap: 24px; flex-direction: column; }
-    }
-
-    /* ── Video section ──────────────────────────────────────
-       Sits directly below the hero. Muted autoplay iframe
-       with the same rounded-card treatment as the rest of the
-       site. Aspect-ratio 16/9 keeps it tidy at any width.
-       ─────────────────────────────────────────────────────── */
-    .video-section { padding: 80px 0 120px; }
-    .video-header {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .video-label {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 12px;
-      letter-spacing: 1.71px;
-      text-transform: uppercase;
-      color: var(--color-neutral-60);
-    }
-    .video-hint {
-      font-family: var(--font-text);
-      font-size: 13px;
-      color: var(--color-neutral-60);
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(14,15,17,.12);
-    }
-    .video-wrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    @media (max-width: 767px) {
-      .video-section { padding: 56px 0 80px; }
-    }
-
-    /* ── Footer ─────────────────────────────────────────────
-       Matches the main site's footer tokens but compressed
-       to a single row — this is a single-page landing, not
-       an anchor for global navigation.
-       ─────────────────────────────────────────────────────── */
-    .site-footer {
-      background: var(--color-neutral-100);
-      padding: 48px 0;
-    }
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .footer-brand {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 15px;
-      color: #fff;
-    }
-    .footer-brand span {
-      font-weight: 400;
-      color: var(--color-neutral-60);
-      margin-left: 8px;
-    }
-    .footer-meta {
-      display: flex;
-      gap: 24px;
-      font-family: var(--font-text);
-      font-size: 13px;
-      color: rgba(255,255,255,.5);
-    }
-    .footer-meta a { transition: color .3s; }
-    .footer-meta a:hover { color: #fff; }
-
-    @media (max-width: 567px) {
-      .footer-row { flex-direction: column; align-items: flex-start; }
-    }
-
-    /* ── Reveal animations ──────────────────────────────────
-       Small fade-up on the hero title + meta + video so the
-       page feels alive on load.
-       ─────────────────────────────────────────────────────── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero h1,
-    .hero-meta,
-    .video-section .container {
-      animation: fadeUp .8s cubic-bezier(.16,1,.3,1) both;
-    }
-    .hero h1             { animation-delay: .1s; }
-    .hero-meta           { animation-delay: .3s; }
-    .video-section .container { animation-delay: .45s; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Augmented Human Lab @ CHI 2026</title>
+<meta name="description" content="The Augmented Human Lab at CHI 2026 in Barcelona — April 12–18, 2026.">
+<link rel="stylesheet" href="https://use.typekit.net/zws2qzx.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="site-nav" id="siteNav">
-    <a class="nav-brand" href="https://ahlab.org/">Augmented Human Lab</a>
-    <a class="nav-back" href="https://ahlab.org/">
-      ahlab.org
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-  </nav>
+<nav class="site-nav" id="siteNav">
+  <a class="nav-brand" href="https://ahlab.org/">Augmented Human Lab</a>
+  <a class="nav-back" href="https://ahlab.org/">ahlab.org <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-eyebrow">CHI 2026 · Barcelona</div>
-      <h1>
-        Augmented Human Lab
-        <span class="hero-h1-sub">at CHI 2026</span>
-      </h1>
-      <div class="hero-meta">
-        <div class="meta-group">
-          <div class="meta-label">Dates</div>
-          <div class="meta-value">April 12–18, 2026</div>
-        </div>
-        <div class="meta-group">
-          <div class="meta-label">Location</div>
-          <div class="meta-value">Barcelona, Spain</div>
-        </div>
-        <div class="meta-group">
-          <div class="meta-label">Lab</div>
-          <div class="meta-value">NUS, Singapore</div>
-        </div>
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">CHI 2026 · Barcelona</div>
+    <h1>Augmented Human Lab<span class="hero-h1-sub">at CHI 2026</span></h1>
+    <div class="hero-meta">
+      <div class="meta-group"><div class="meta-label">Dates</div><div class="meta-value">April 12–18, 2026</div></div>
+      <div class="meta-group"><div class="meta-label">Location</div><div class="meta-value">Barcelona, Spain</div></div>
+      <div class="meta-group"><div class="meta-label">Lab</div><div class="meta-value">NUS, Singapore</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="video-section">
+  <div class="container">
+    <div class="video-header"><div class="video-label">Lab Overview</div><div class="video-hint">Click the video to unmute</div></div>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube-nocookie.com/embed/tT8RRAO4VyQ?loop=1&playsinline=1&rel=0&modestbranding=1" title="AHLab overview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="schedule">
+  <div class="container">
+
+    <div class="schedule-group">
+      <div class="schedule-group-header"><h2>Full Papers</h2><span class="count">5 papers</span></div>
+      <div class="schedule-list">
+
+        <article class="schedule-card">
+          <a class="schedule-thumb" href="https://ahlab.org/project/dronebuddy/" target="_blank" rel="noopener"><img src="https://cdn.ahlab.org/media/site/projects/dronebuddy/dronebuddy.jpg" alt=""></a>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3><a href="https://ahlab.org/project/dronebuddy/" target="_blank" rel="noopener">Towards LLM-powered Assistive Drone for Blind and Low Vision Users</a></h3></div>
+            <div class="schedule-presenter-row">
+              <span>Presenter: <a href="https://ahlab.org/people/yize-wei/" target="_blank" rel="noopener"><strong>Yize Wei</strong></a></span>
+              <span>Project: <a href="https://ahlab.org/project/dronebuddy/" target="_blank" rel="noopener"><strong>DroneBuddy</strong></a></span>
+            </div>
+            <span class="schedule-session">Blind and Low-Vision Interaction</span>
+            <div class="schedule-when"><strong>Fri, 17 Apr</strong> · 11:27–11:39 AM · P1 – Room 120</div>
+          </div>
+        </article>
+
+        <article class="schedule-card">
+          <a class="schedule-thumb" href="https://ahlab.org/project/sonicvista/" target="_blank" rel="noopener"><img src="https://cdn.ahlab.org/media/site/projects/sonicvista/sonicvista.jpg" alt=""></a>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3><a href="https://ahlab.org/project/sonicvista/" target="_blank" rel="noopener">Beyond Descriptions: A Generative Scene2Audio Framework for Blind and Low-Vision Users to Experience Vista Landscapes</a></h3></div>
+            <div class="schedule-presenter-row">
+              <span>Presenter: <a href="https://ahlab.org/people/chitralekha-gupta/" target="_blank" rel="noopener"><strong>Chitralekha Gupta</strong></a></span>
+              <span>Project: <a href="https://ahlab.org/project/sonicvista/" target="_blank" rel="noopener"><strong>SonicVista</strong></a></span>
+            </div>
+            <span class="schedule-session">Captioning, Description, and Media Interaction</span>
+            <div class="schedule-when"><strong>Thu, 16 Apr</strong> · 9:00–9:12 AM · P1 – Room 120</div>
+          </div>
+        </article>
+
+        <article class="schedule-card">
+          <a class="schedule-thumb" href="https://ahlab.org/project/factually/" target="_blank" rel="noopener"><img src="https://cdn.ahlab.org/media/site/projects/factually/factually.jpg" alt=""></a>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3><a href="https://ahlab.org/project/factually/" target="_blank" rel="noopener">Feeling the Facts: Real-time Wearable Fact-checkers Can Use Nudges to Reduce User Belief in False Information</a></h3></div>
+            <div class="schedule-presenter-row">
+              <span>Presenters: <a href="https://ahlab.org/people/chitralekha-gupta/" target="_blank" rel="noopener"><strong>Chitralekha Gupta</strong></a>, <a href="https://ahlab.org/people/nadia-aritonang/" target="_blank" rel="noopener"><strong>Nadia Victoria Aritonang</strong></a></span>
+              <span>Project: <a href="https://ahlab.org/project/factually/" target="_blank" rel="noopener"><strong>Factually</strong></a></span>
+            </div>
+            <span class="schedule-session">Digital Wellbeing Frameworks and Design Strategies</span>
+            <div class="schedule-when"><strong>Fri, 17 Apr</strong> · 10:00–10:12 AM · P1 – Room 112</div>
+          </div>
+        </article>
+
+        <article class="schedule-card">
+          <a class="schedule-thumb" href="https://ahlab.org/project/zenflow/" target="_blank" rel="noopener"><img src="https://cdn.ahlab.org/media/site/projects/zenflow/zenflow.jpg" alt=""></a>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3><a href="https://ahlab.org/project/zenflow/" target="_blank" rel="noopener">Zenflow: Investigating MR Transitions for Enhancing Sleep and Relaxation</a></h3><span class="schedule-award" title="Award">★</span></div>
+            <div class="schedule-presenter-row">
+              <span>Presenter: <a href="https://ahlab.org/people/praveen-sasikumar/" target="_blank" rel="noopener"><strong>Praveen Sasikumar</strong></a></span>
+              <span>Project: <a href="https://ahlab.org/project/zenflow/" target="_blank" rel="noopener"><strong>Zenflow</strong></a></span>
+            </div>
+            <span class="schedule-session">Mental Wellbeing</span>
+            <div class="schedule-when"><strong>Thu, 16 Apr</strong> · 12:03–12:15 PM · P1 – Room 115</div>
+          </div>
+        </article>
+
+        <article class="schedule-card">
+          <div class="schedule-thumb schedule-thumb-placeholder"><span>VisceroHaptics</span></div>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3>VisceroHaptics: Investigating the Effects of Gut-based Audio-Haptic Feedback on Gastric Feelings and Interoceptive Behavior</h3><span class="schedule-award" title="Award">★</span></div>
+            <div class="schedule-presenter">Presenter: <a href="https://ahlab.org/people/mia-huong-nguyen/" target="_blank" rel="noopener"><strong>Mia Huong Nguyen</strong></a></div>
+            <span class="schedule-session">Eating Behaviors and Food-Related Technologies</span>
+            <div class="schedule-when"><strong>Wed, 15 Apr</strong> · 11:51 AM–12:03 PM · P1 – Room 121</div>
+          </div>
+        </article>
+
       </div>
     </div>
-  </section>
 
-  <!-- VIDEO -->
-  <section class="video-section">
-    <div class="container">
-      <div class="video-header">
-        <div class="video-label">Lab Overview</div>
-        <div class="video-hint">Click the video to unmute</div>
-      </div>
-      <div class="video-wrapper">
-        <!--
-          YouTube embed: autoplay muted, looping, no branded controls.
-          The iframe is loaded on page load (not lazy). It's pointed at
-          youtube-nocookie.com so no tracking cookies are set until the
-          user actually interacts with the player.
+    <div class="schedule-group">
+      <div class="schedule-group-header"><h2>Posters</h2><span class="count">2 posters</span></div>
+      <div class="schedule-list">
 
-          Video ID: iWH0V2SJaDw
-          Params:
-            autoplay=1   → start playing on load
-            mute=1       → required for autoplay to work (browser policy)
-            loop=1       → when it ends, start again
-            playlist=ID  → required for loop=1 to work with single videos
-            playsinline=1 → keeps video inline on mobile (doesn't go fullscreen)
-            rel=0        → don't show "related videos" from other channels at end
-            modestbranding=1 → minimal YouTube logo
-        -->
-            
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/tT8RRAO4VyQ?loop=1&playsinline=1&rel=0&modestbranding=1"
-          title="Augmented Human Lab — overview"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
+        <article class="schedule-card">
+          <div class="schedule-thumb schedule-thumb-placeholder"><span>Interrupting Autopilot</span></div>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3>Interrupting Autopilot: Evaluating Sensory Interventions for Momentary Self-Regulation</h3></div>
+            <div class="schedule-presenter">Presenter: <a href="https://ahlab.org/people/dinithi-dissanayake/" target="_blank" rel="noopener"><strong>Dinithi Dissanayake</strong></a></div>
+            <span class="schedule-session">Poster Session</span>
+            <div class="schedule-when"><strong>Mon, 13 Apr</strong> · 2:15–3:45 PM &amp; 4:30–6:00 PM</div>
+          </div>
+        </article>
+
+        <article class="schedule-card">
+          <a class="schedule-thumb" href="https://ahlab.org/project/aisee/" target="_blank" rel="noopener"><img src="https://cdn.ahlab.org/media/site/projects/aisee/aisee.jpg" alt=""></a>
+          <div class="schedule-body">
+            <div class="schedule-title-row"><h3><a href="https://ahlab.org/project/aisee/" target="_blank" rel="noopener">AiSee++: An Open-Source Rapid Prototyping Platform for Screen-free Heads-Up Computing</a></h3></div>
+            <div class="schedule-presenter-row">
+              <span>Presenter: <a href="https://ahlab.org/people/ovindu-atukorala/" target="_blank" rel="noopener"><strong>Ovindu Atukorala</strong></a></span>
+              <span>Project: <a href="https://ahlab.org/project/aisee/" target="_blank" rel="noopener"><strong>AiSee</strong></a></span>
+            </div>
+            <span class="schedule-session">Poster Session</span>
+            <div class="schedule-when"><strong>Thu, 16 Apr</strong> · 2:15–3:45 PM &amp; 4:30–6:00 PM</div>
+          </div>
+        </article>
+
       </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-row">
-        <div class="footer-brand">
-          Augmented Human Lab <span>NUS</span>
-        </div>
-        <div class="footer-meta">
-          <a href="https://ahlab.org/">ahlab.org</a>
-          <a href="https://chi2026.acm.org/">chi2026.acm.org</a>
-        </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-brand">Augmented Human Lab <span>NUS</span></div>
+      <div class="footer-meta">
+        <a href="https://ahlab.org/">ahlab.org</a>
+        <a href="https://chi2026.acm.org/">chi2026.acm.org</a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script>
-    // Two-mode nav: add .scrolled class once the user has moved past ~60px.
-    // The CSS handles the transition (transparent → white background).
-    const nav = document.getElementById('siteNav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
-  </script>
+<script>
+const nav = document.getElementById('siteNav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+</script>
 
 </body>
 </html>
