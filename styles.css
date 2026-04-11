@@ -277,8 +277,6 @@ ul  { list-style: none; }
   font-size: 18px; line-height: 1.3;
   color: var(--color-neutral-100);
 }
-.schedule-body h3 a { color: inherit; transition: color .3s; }
-.schedule-body h3 a:hover { color: var(--color-accent); }
 
 .schedule-award {
   position: absolute;
